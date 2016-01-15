@@ -1,0 +1,221 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ec="http://schemas.microsoft.com/expression/2010/controls" x:Class="RegularExpressionTester.MainWindow"
+        Title="Regular Expression Tester - Untitled" Height="650" Width="800" x:Name="myWin" Loaded="myWin_Loaded" Closing="window_Closing" Icon="/RegularExpressionTester;component/Program.ico">
+
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="{DynamicResource StartColor}" Offset="0" />
+            <GradientStop Color="{DynamicResource EndColor}" Offset="1" />
+        </LinearGradientBrush>
+    </Window.Background>
+    <Window.Resources>
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="Rect" TargetType="Rectangle">
+            <Setter Property="VerticalAlignment" Value="Top"></Setter>
+            <Setter Property="Stroke" Value="Black"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            <Setter Property="StrokeThickness" Value="1"></Setter>
+            <Setter Property="Fill" Value="Transparent"></Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect></DropShadowEffect>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate x:Key="HeaderTemplateArrowUp">
+            <DockPanel>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding}"/>
+                <Path x:Name="arrow" StrokeThickness = "1" Fill = "gray" Data = "M 5,10 L 15,10 L 10,5 L 5,10"/>
+            </DockPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="HeaderTemplateArrowDown">
+            <DockPanel>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding }"/>
+                <Path x:Name="arrow" StrokeThickness = "1" Fill = "gray" Data = "M 5,5 L 10,10 L 15,5 L 5,5"/>
+            </DockPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Menu FontSize="16"  Height="23" HorizontalAlignment="Left" x:Name="menu1" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=myWin}">
+            <Menu.Background>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                    <GradientStop Color="{DynamicResource StartColor}" Offset="0" />
+                    <GradientStop Color="{DynamicResource EndColor}" Offset="1" />
+                </LinearGradientBrush>
+            </Menu.Background>
+
+            <MenuItem FontSize="14" Header="_File">
+                <MenuItem Header="_New" Command="New"/>
+                <MenuItem Header="_Open..." Command="Open"/>
+                <MenuItem Header="_Save" Command="Save"/>
+                <MenuItem Header="_Save As..." Command="SaveAs"/>
+                <MenuItem Header="_Exit" Name="MenuItemExit" Click="MenuItemExit_Click" />
+            </MenuItem>
+            <MenuItem FontSize="14" Header="_Edit">
+                <MenuItem Header="Cut" Command="Cut"/>
+                <MenuItem Header="Copy" Command="Copy"/>
+                <MenuItem Header="Paste" Command="Paste"/>
+            </MenuItem>
+            <MenuItem FontSize="14" Header="_Copy">
+                <MenuItem Header="Copy Regular Expression" Click="MenuItemCopyRegularExpression_Click"/>
+                <MenuItem Header="Copy C# Constructor" Click="MenuItemCopyCCons_Click"/>
+                <MenuItem Header="Copy VB Constructor" Click="MenuItemCopyVBCons_Click"/>
+                <Separator/>
+                <MenuItem Header="Copy Selected Match" Click="MenuItemCopySelectedMatch_Click"/>
+                <MenuItem Header="Copy All Matches" Click="MenuItemCopyAllMatches_Click"/>
+            </MenuItem>
+            <MenuItem FontSize="14" Header="_Options">
+                <MenuItem Header="Setings" Name="MenuItemSettings" Click="MenuItemSettings_Click"/>
+            </MenuItem>
+            <MenuItem FontSize="14" Header="_Insert">
+                <MenuItem Header="Escape Sequences">
+                    <MenuItem Header="Bell character (\a)" Click="MenuItem_Click_1"></MenuItem>
+                    <MenuItem Header="Backspace character (\b)" Click="MenuItem_Click_2"></MenuItem>
+                    <MenuItem Header="Tab character (\t)" Click="MenuItem_Click_3"></MenuItem>
+                    <MenuItem Header="Carriage return (\r)" Click="MenuItem_Click_4"></MenuItem>
+                    <MenuItem Header="Vertical tab (\v)" Click="MenuItem_Click_5"></MenuItem>
+                    <MenuItem Header="Form feed (\f)" Click="MenuItem_Click_6"></MenuItem>
+                    <MenuItem Header="New line (\n)" Click="MenuItem_Click_7"></MenuItem>
+                    <MenuItem Header="Escape (\e)" Click="MenuItem_Click_8"></MenuItem>
+                    <MenuItem Header="Period or Dot Character(\.)" Click="MenuItem_Click_9"></MenuItem>
+                    <MenuItem Header="Dollar Character (\$)" Click="MenuItem_Click_10"></MenuItem>
+                    <MenuItem Header="Caret Character (\^)" Click="MenuItem_Click_11"></MenuItem>
+                    <MenuItem Header="Open Brace (\{)" Click="MenuItem_Click_12"></MenuItem>
+                    <MenuItem Header="Close Brace (\})" Click="MenuItem_Click_13"></MenuItem>
+                    <MenuItem Header="Open Parenthesis (\()" Click="MenuItem_Click_14"></MenuItem>
+                    <MenuItem Header="Close Parenthesis (\))" Click="MenuItem_Click_15"></MenuItem>
+                    <MenuItem Header="Open Bracket (\[)" Click="MenuItem_Click_16"></MenuItem>
+                    <MenuItem Header="Close Bracket (\])" Click="MenuItem_Click_17"></MenuItem>
+                    <MenuItem Header="Backslash Character (\\)" Click="MenuItem_Click_18"></MenuItem>
+                    <MenuItem Header="Question Mark (\?)" Click="MenuItem_Click_19"></MenuItem>
+                    <MenuItem Header="Plus Sign (\+)" Click="MenuItem_Click_20"></MenuItem>
+                    <MenuItem Header="Asterisk (\*)" Click="MenuItem_Click_21"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Character Classes">
+                    <MenuItem Header="Positive Character Group ([character_group])" Click="MenuItem_Click_22"></MenuItem>
+                    <MenuItem Header="Negative Character Group ([^character_group])" Click="MenuItem_Click_23"></MenuItem>
+                    <MenuItem Header="Positive Character Range ([firstCharacter-lastCharacter])" Click="MenuItem_Click_24"></MenuItem>
+                    <MenuItem Header="Negative Character Range ([^firstCharacter-lastCharacter])" Click="MenuItem_Click_25"></MenuItem>
+                    <MenuItem Header="Positive Unicode Block (\p{name})" Click="MenuItem_Click_26"></MenuItem>
+                    <MenuItem Header="Negative Unicode Block (\P{name})" Click="MenuItem_Click_27"></MenuItem>
+                    <Separator></Separator>
+                    <MenuItem Header="Any Character (.) " Click="MenuItem_Click_28"></MenuItem>
+                    <MenuItem Header="Word Character (\w)" Click="MenuItem_Click_29"></MenuItem>
+                    <MenuItem Header="Non-Word Character (\W)" Click="MenuItem_Click_30"></MenuItem>
+                    <MenuItem Header="White-Space Character (\s)" Click="MenuItem_Click_31"></MenuItem>
+                    <MenuItem Header="Non-White-Space Character (\S)" Click="MenuItem_Click_32"></MenuItem>
+                    <MenuItem Header="Decimal Digit (\d)" Click="MenuItem_Click_33"></MenuItem>
+                    <MenuItem Header="Non-Decimal Digit (\D)" Click="MenuItem_Click_34"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Anchors">
+                    <MenuItem Header="Start of String or Line (^)" Click="MenuItem_Click_35"></MenuItem>
+                    <MenuItem Header="End of String or Line ($)" Click="MenuItem_Click_36"></MenuItem>
+                    <MenuItem Header="Start of String Only; No MultiLine Support (\A)" Click="MenuItem_Click_37"></MenuItem>
+                    <MenuItem Header="End of String or Before Ending Newline; ; No MultiLine Support (\Z)" Click="MenuItem_Click_38"></MenuItem>
+                    <MenuItem Header="End of String Only; No MultiLine Support (\z)" Click="MenuItem_Click_39"></MenuItem>
+                    <MenuItem Header="Contiguous Matches (\G)" Click="MenuItem_Click_40"></MenuItem>
+                    <MenuItem Header="Word Boundary (\b)" Click="MenuItem_Click_41"></MenuItem>
+                    <MenuItem Header="Non-Word Boundary (\B)" Click="MenuItem_Click_42"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Grouping Constructs">
+                    <MenuItem Header="Matched Subexpressions ( (subexpression) )" Click="MenuItem_Click_43"></MenuItem>
+                    <MenuItem Header="Named Matched Subexpressions 1 ( (?&lt;name>subexpression) )" Click="MenuItem_Click_44"/>
+                    <MenuItem Header="Named Matched Subexpressions 2 ( (?'name'subexpression) )" Click="MenuItem_Click_45"></MenuItem>
+                    <MenuItem Header="Balancing Group 1 ( (?&lt;name1-name2>subexpression) )" Click="MenuItem_Click_46"></MenuItem>
+                    <MenuItem Header="Balancing Group 2 ( (?'name1-name2'subexpression) )" Click="MenuItem_Click_47"></MenuItem>
+                    <MenuItem Header="Noncapturing Groups ( (?:subexpression) )" Click="MenuItem_Click_48"></MenuItem>
+                    <MenuItem Header="Zero-Width Positive Lookahead Assertions ( (?=subexpression) )" Click="MenuItem_Click_49"></MenuItem>
+                    <MenuItem Header="Zero-Width Negative Lookahead Assertions ( (?!subexpression) )" Click="MenuItem_Click_50"></MenuItem>
+                    <MenuItem Header="Zero-Width Positive Lookbehind Assertions ( (?&lt;=subexpression) )" Click="MenuItem_Click_51"></MenuItem>
+                    <MenuItem Header="Zero-Width Negative Lookbehind Assertions ( (?&lt;!subexpression) )" Click="MenuItem_Click_52"></MenuItem>
+                    <MenuItem Header="Nonbacktracking Subexpressions ( (?>subexpression) )" Click="MenuItem_Click_53"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Quantifiers">
+                    <MenuItem Header="Zero or more times (*)" Click="MenuItem_Click_54"></MenuItem>
+                    <MenuItem Header="One or more times (+)" Click="MenuItem_Click_55"></MenuItem>
+                    <MenuItem Header="Zero or one time (?)" Click="MenuItem_Click_56"></MenuItem>
+                    <MenuItem Header="Exactly n times ({n})" Click="MenuItem_Click_57"></MenuItem>
+                    <MenuItem Header="At least n times ({n,})" Click="MenuItem_Click_58"></MenuItem>
+                    <MenuItem Header="From n to m times ({n,m})" Click="MenuItem_Click_59"></MenuItem>
+                    <MenuItem Header="Make a quantifier lazy (Append ?)" Click="MenuItem_Click_60"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Backreference Constructs">
+                    <MenuItem Header="Immediate Backreference (\1)" Click="MenuItem_Click_61"></MenuItem>
+                    <MenuItem Header="Numbered Backreferences (\number)" Click="MenuItem_Click_62"></MenuItem>
+                    <MenuItem Header="Named Backreferences 1 (\k&lt;name>)" Click="MenuItem_Click_63"></MenuItem>
+                    <MenuItem Header="Named Backreferences 2 (\k'name')" Click="MenuItem_Click_64"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Alternation Constructs">
+                    <MenuItem Header="Or (|)" Click="MenuItem_Click_65" ></MenuItem>
+                    <MenuItem Header="Conditional Expression Match ( (?(expression)yes|no) )" Click="MenuItem_Click_66"></MenuItem>
+                    <MenuItem Header="Conditional Named Match ( (?(name Or number)yes|no) )" Click="MenuItem_Click_67"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Substitution">
+                    <MenuItem Header="Substitute Numbered Group ($number)" Click="MenuItem_Click_68"></MenuItem>
+                    <MenuItem Header="Substitute Named Group (${name})" Click="MenuItem_Click_69"></MenuItem>
+                    <MenuItem Header="Substitute '$' Symbol ($$)" Click="MenuItem_Click_70"></MenuItem>
+                    <MenuItem Header="Substitute Entire Match ($&amp;)" Click="MenuItem_Click_71"></MenuItem>
+                    <MenuItem Header="Substitute Text before Match ($')" Click="MenuItem_Click_72"></MenuItem>
+                    <MenuItem Header="Substitute Text after Match ($')" Click="MenuItem_Click_73"></MenuItem>
+                    <MenuItem Header="Substitute Last Captured Group ($+)" Click="MenuItem_Click_74"></MenuItem>
+                    <MenuItem Header="Substitute Entire Input String ($_)" Checked="MenuItem_Checked"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Miscellaneous Constructs">
+                    <MenuItem Header="Inline Options ( (?imnsx-imnsx) )" Click="MenuItem_Click_75"></MenuItem>
+                    <MenuItem Header="Inline Comment ( (?#comment) )" Click="MenuItem_Click_76"></MenuItem>
+                    <MenuItem Header="End-of-Line Comment (#)" Click="MenuItem_Click_77"></MenuItem>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem FontSize="14" Header="_Help">
+                <MenuItem Header="_About" Click="MenuItemAbout_Click"/>
+            </MenuItem>
+        </Menu>
+        <Rectangle Height="284" Style="{StaticResource Rect}" Margin="371,42,0,0" x:Name="rectangle1"  Width="386" />
+        <Rectangle Height="252" Style="{StaticResource Rect}" Margin="371,347,0,0" x:Name="rectangle" Width="386"/>
+        <Rectangle Height="349" Style="{StaticResource Rect}" Margin="17,42,0,0" x:Name="rectangle2" Width="331"/>
+        <Rectangle Height="188" Style="{StaticResource Rect}" Margin="17,411,0,0" x:Name="rectangle3" Width="331" />
+        <TextBox Height="100" HorizontalAlignment="Left" Margin="36,69,0,0" x:Name="tbInput" VerticalAlignment="Top" Width="296" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="tb_Input" VerticalScrollBarVisibility="Auto" />
+        <Label Content="Input String" Height="28" HorizontalAlignment="Left" Margin="36,42,0,0" x:Name="label1" VerticalAlignment="Top" Foreground="Black" FontWeight="Bold" />
+        <TextBox Height="100" HorizontalAlignment="Left" Margin="36,197,0,0" x:Name="tbRegex" TextWrapping="Wrap" VerticalAlignment="Top" Width="294" TextChanged="tb_Regex" AcceptsReturn="True" />
+        <Label Content="Regular Expression" Height="28" HorizontalAlignment="Left" Margin="36,171,0,0" x:Name="label2" VerticalAlignment="Top" Foreground="Black" FontWeight="Bold" />
+        <Label Content="Matches" Height="28" HorizontalAlignment="Left" Margin="387,48,0,0" x:Name="label3" VerticalAlignment="Top" Foreground="Black" FontWeight="Bold" />
+        <Label Content="Groups" HorizontalAlignment="Left" Margin="387,352,0,0" x:Name="label4" Height="28" VerticalAlignment="Top" Foreground="Black" FontWeight="Bold" />
+        <TextBox Height="26" HorizontalAlignment="Left" Margin="36,347,0,0" x:Name="tbStatus" VerticalAlignment="Top" Width="290" IsReadOnly="True" Text="OK" Background="White" />
+        <Label Content="RegEx Status" Height="28" HorizontalAlignment="Left" Margin="36,320,0,0" x:Name="label6" VerticalAlignment="Top" Foreground="Black" FontWeight="Bold" />
+        <Label Content="RegEx Options" Height="28" HorizontalAlignment="Left" Margin="38,424,0,0" x:Name="label8" VerticalAlignment="Top" Foreground="Black" FontWeight="Bold" />
+        <CheckBox Content="ECMAScript" Height="16" HorizontalAlignment="Left" Margin="42,458,0,0" x:Name="cbEcma" VerticalAlignment="Top" Checked="cb_Checked" Unchecked="cb_Unchecked" FontWeight="Bold" />
+        <CheckBox Content="IgnoreCase" Height="16" HorizontalAlignment="Left" Margin="163,458,0,0" x:Name="cbIgnCase" VerticalAlignment="Top" Checked="cb_Checked" Unchecked="cb_Unchecked" FontWeight="Bold" />
+        <CheckBox Content="SingleLine" Height="16" HorizontalAlignment="Left" Margin="42,497,0,0" x:Name="cbSL" VerticalAlignment="Top" Checked="cb_Checked" Unchecked="cb_Unchecked" FontWeight="Bold" />
+        <CheckBox Content="MultiLine" Height="16" HorizontalAlignment="Left" Margin="163,497,0,0" x:Name="cbML" VerticalAlignment="Top" Checked="cb_Checked" Unchecked="cb_Unchecked" FontWeight="Bold" />
+        <CheckBox Content="CultureInvariant" Height="16" HorizontalAlignment="Left" Margin="42,535,0,0" x:Name="cbCulInv" VerticalAlignment="Top" Checked="cb_Checked" Unchecked="cb_Unchecked" FontWeight="Bold" />
+        <CheckBox Content="RightToLeft" Height="16" HorizontalAlignment="Left" Margin="163,535,0,0" x:Name="cbRTL" VerticalAlignment="Top" Checked="cb_Checked" Unchecked="cb_Unchecked" FontWeight="Bold" />
+        <CheckBox Content="ExplicitCapture" Height="16" HorizontalAlignment="Left" Margin="42,573,0,0" x:Name="cbExpCap" VerticalAlignment="Top" Checked="cb_Checked" Unchecked="cb_Unchecked" FontWeight="Bold" />
+        <CheckBox Content="IgnorePatternWhitespace" Height="16" HorizontalAlignment="Left" Margin="163,573,0,0" x:Name="cbIgnPatWhi" VerticalAlignment="Top" Checked="cb_Checked" Unchecked="cb_Unchecked" FontWeight="Bold" />
+        <Label Content="(Note : Pressing Enter inserts \r\n character)" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="36,298,0,0" x:Name="label9" VerticalAlignment="Top" Foreground="Black" />
+        <ListView GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler" Name="lvMatches" Width="349" Height="238" Margin="390,75,0,0" SelectionMode="Single" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="lvMatches_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="No" Width="50" DisplayMemberBinding="{Binding Path=CurrentCount}"/>
+                    <GridViewColumn Header="Index" Width="55" DisplayMemberBinding="{Binding Path=Index}"/>
+                    <GridViewColumn Header="Length" Width="60" DisplayMemberBinding="{Binding Path=Length}"/>
+                    <GridViewColumn Header="Matched String" Width="170" DisplayMemberBinding="{Binding Path=MatchedString}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler" Height="207" HorizontalAlignment="Left" Margin="390,382,0,0" Name="lvGroups" SelectionMode="Single" VerticalAlignment="Top" Width="349" BorderThickness="1" SelectionChanged="lvGroups_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=GroupName}" Header="Name" Width="50"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Index}" Header="Index" Width="55" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Length}" Header="Length" Width="60" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=MatchedString}" Header="Matched String" Width="170" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
